@@ -1,0 +1,48 @@
+{
+    "courses": [
+        {
+            "name": "example1",
+            "time": 10
+        },
+        {
+            "name": "example2",
+            "time": 20
+        },
+        {
+            "name": "example3",
+            "time": 30
+        },
+        {
+            "name": "example4",
+            "time": 40
+        },
+        {
+            "name": "example5",
+            "time": 50
+        }
+    ],
+    "users": [
+        {
+            "username": "student",
+            "password": "student",
+            "role": "student",
+            "isStudent": true,
+            "isInstructor": false,
+            "firstname": "Chakatpon",
+            "lastname": "Khunthong",
+            "nickname": "Petch",
+            "id": 1
+        },
+        {
+            "username": "instructor",
+            "password": "instructor",
+            "role": "instructor",
+            "isStudent": false,
+            "isInstructor": true,
+            "firstname": "Puttichon",
+            "lastname": "Preedeepinidnan",
+            "nickname": "James",
+            "id": 2
+        }
+    ]
+}
