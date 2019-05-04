@@ -1,6 +1,6 @@
 export function configureFakeBackend() {
-    let users = [{ id: 1, username: 'student', password: 'student', firstName: 'Chakatpon', lastName: 'Khunthong', nickName: 'Petch', isIns: false },
-                { id: 2, username: 'instructor', password: 'instructor', firstName: 'Puttichon', lastName: 'Preeddeepinidnan', nickName: 'James', isIns: true }];
+    let users = [{ id: 1, username: 'student', password: 'student', role:'student', firstName: 'Chakatpon', lastName: 'Khunthong', nickName: 'Petch', isIns: false },
+                { id: 2, username: 'instructor', password: 'instructor', role:'instructor', firstName: 'Puttichon', lastName: 'Preeddeepinidnan', nickName: 'James', isIns: true }];
     let realFetch = window.fetch;
     window.fetch = function (url, opts) {
         return new Promise((resolve, reject) => {
@@ -14,7 +14,7 @@ export function configureFakeBackend() {
 
                     // find if any user matches login credentials
                     let filteredUsers = users.filter(user => {
-                        return user.username === params.username && user.password === params.password;
+                        return user.username === params.username && user.password === params.password && user.role === params.role;
                     });
 
                     if (filteredUsers.length) {
@@ -24,7 +24,9 @@ export function configureFakeBackend() {
                             id: user.id,
                             username: user.username,
                             firstName: user.firstName,
-                            lastName: user.lastName
+                            lastName: user.lastName,
+                            nickName: user.nickName,
+                            isIns: user.isIns
                         };
                         resolve({ ok: true, text: () => Promise.resolve(JSON.stringify(responseJson)) });
                     } else {
@@ -39,7 +41,7 @@ export function configureFakeBackend() {
                 if (url.endsWith('/users') && opts.method === 'GET') {
                     // check for fake auth token in header and return users if valid, this security 
                     // is implemented server side in a real application
-                    if (opts.headers && opts.headers.Authorization === (`Basic ${window.btoa('student:student')}`) || (`Basic ${window.btoa('instructor:instructor')}`)) {
+                    if (opts.headers && opts.headers.Authorization === (`Basic ${window.btoa('student:student:student')}`) || (`Basic ${window.btoa('instructor:instructor:instructor')}`)) {
                         resolve({ ok: true, text: () => Promise.resolve(JSON.stringify(users)) });
                     } else {
                         // return 401 not authorised if token is null or invalid
