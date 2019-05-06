@@ -1,8 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import ReactDOM from 'react-dom';
+import { Link} from 'react-router-dom';
 
 import { userService } from '../_services';
-import courses from '../apis/courses';
+import CourseList from '../components/CourseList';
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -14,15 +15,12 @@ class HomePage extends React.Component {
         };
     }
 
-    async componentDidMount() {
+    componentDidMount() {
         this.setState({ 
             user: JSON.parse(localStorage.getItem('user')),
             users: { loading: true }
         });
         userService.getAll().then(users => this.setState({ users }));
-        const response = await courses.get('/courses');
-        const data = await response.data;
-        console.log(data);
     }
 
 
@@ -30,22 +28,20 @@ class HomePage extends React.Component {
         const { user, users } = this.state;
         return (
             <div className="container">
-                <h1>Welcome {user.firstName}! to skilllane courses</h1>
-                <p>You can learn every where & every time !!!</p>
-                <h3>Our Courses :</h3>
+                <h2>Welcome {user.firstName} ! to skilllane courses</h2>
+                <h4>You can learn every where & every time !!!</h4>
                 {users.loading && <em>Loading users...</em>}
                 {users.length &&
-                    <ul>
-                        {users.map((user, index) =>
-                            <li key={user.id}>
-                                {user.firstName + ' ' + user.lastName}
-                            </li>
-                        )}
-                    </ul>
+                    <div>
+                    <h4>    
+                        <strong>{user.isIns ? 'Instructor: ' : 'Student: '}</strong>{user.firstName + ' ' + user.lastName}   
+                    </h4>
+                    <h4><strong>Nickname: </strong>{user.nickName}</h4>
+                    </div>
                 }
-                <p>
-                    <Link className="btn btn-danger" to="/login">Logout</Link>
-                </p>
+                {user.isIns && <Link to="/course/new" className="btn btn-success" style={{marginRight:5}}>Create Course</Link>}
+                <Link className="btn btn-danger" to="/login">Logout</Link>
+                <CourseList user={user}/>
             </div>
         );
     }
