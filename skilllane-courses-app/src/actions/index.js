@@ -4,6 +4,7 @@ import {
     LOG_IN,
     LOG_OUT,
     SET_DATA,
+    SET_USER,
     USER_NAME,
     PASSWORD,
     ROLE,
@@ -12,12 +13,20 @@ import {
     FETCH_COURSE,
     DELETE_COURSE,
     EDIT_COURSE
+    
 } from './types'
 
 
 export const setData = (value) => {
     return {
         type: SET_DATA,
+        payload: value
+    }
+}
+
+export const setUser = (value) => {
+    return {
+        type: SET_USER,
         payload: value
     }
 }

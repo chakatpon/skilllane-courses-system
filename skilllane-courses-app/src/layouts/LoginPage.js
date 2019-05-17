@@ -6,6 +6,19 @@ import history from '../history';
 
 class LoginPage extends React.Component {
 
+    componentDidMount() {
+        this.props.setData({
+            isLogedIn: false,
+            username: '',
+            password: '',
+            role: 'student',
+            submitted: false,
+            loading: false,
+            error: ''
+            
+        })
+    }
+
     handleChange = (e) => {
         const { name, value } = e.target;
         this.setState({ [name]: value });
@@ -77,7 +90,7 @@ class LoginPage extends React.Component {
                               id="role" 
                               name="role"
                               className="form-control"
-                              onChange={this.handleChange}
+                              onChange={this.handleTextChange}
                               value={role}>
                                 <option value="student">Student</option>
                                 <option value="instructor">Instructor</option>

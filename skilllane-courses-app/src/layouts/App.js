@@ -2,17 +2,14 @@ import React from 'react';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
 
 import { PrivateRoute } from '../_components';
-import { HomePage } from '../HomePage';
-// import { LoginPage } from '../LoginPage';
-import LoginPage from '../LoginPage/LoginPage';
+import HomePage from './HomePage.js';
+import LoginPage from './LoginPage';
 import history from '../history';
 
 import CourseCreate from '../components/CourseCreate';
 import CourseEdit from '../components/CourseEdit';
 import CourseDelete from '../components/CourseDelete';
 import CourseShow from '../components/CourseShow';
-
-
 
 class App extends React.Component {
     render() {
@@ -24,7 +21,7 @@ class App extends React.Component {
                             <div>
                                 
                                 <Switch>
-                                <PrivateRoute exact path="/" component={HomePage} />
+                                <PrivateRoute exact path="/" component={() => <HomePage/>} />
                                 <PrivateRoute exact path="/course/new" component={CourseCreate}/>
                                 <PrivateRoute exact path="/course/edit/:id" component={CourseEdit}/>
                                 <PrivateRoute exact path="/course/delete/:id" component={CourseDelete}/>
@@ -41,4 +38,4 @@ class App extends React.Component {
     }
 }
 
-export { App }; 
+export default App; 
