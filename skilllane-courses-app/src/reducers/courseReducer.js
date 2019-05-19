@@ -5,21 +5,40 @@ import {
     FETCH_COURSES,
     FETCH_COURSE,
     DELETE_COURSE,
-    EDIT_COURSE
+    EDIT_COURSE,
+    SEARCH_COURSE,
+    INIT_COURSE
 } from '../actions/types'
 
-export default (state = {}, action) => {
+const INITIAL_STATE = {
+    value:  '',
+    courses: [],
+    filteredCourses: []
+}
+
+export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case FETCH_COURSES:
-            return {...state, ..._.mapKeys(action.payload, 'id')};
+            console.log("state : ",{...state, courses: [...action.payload]})
+            return {...state, courses: [...action.payload]};
         case FETCH_COURSE:
-            return {...state, [action.payload.id]: action.payload};
+            return {...state, courses: [...{...state.courses, [action.payload.id]: action.payload}]};
         case CREATE_COURSE:
-            return {...state, [action.payload.id]: action.payload};
+            return {...state, courses: {...state.courses, [action.payload.id]: action.payload}};
         case EDIT_COURSE:
-            return {...state, [action.payload.id]: action.payload};
+            return {...state, courses: {...state.courses, [action.payload.id]: action.payload}};
         case DELETE_COURSE:
-            return _.omit(state, action.payload)
+            return {...state, courses: _.omit(state.courses, action.payload)};
+        case SEARCH_COURSE:
+                {
+                    const value = action.payload;
+                    const filteredCourses = state.courses.filter((element => {
+                        return element.title.toLowerCase().includes(value.toLowerCase());
+                      }));
+                    return {...state, value, filteredCourses};
+                }
+        case INIT_COURSE:
+            return action.payload
         default:
             return state;
         

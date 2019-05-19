@@ -1,31 +1,62 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
-import { connect } from 'react-redux';
-import { searchCourse, fetchCourses, initCourse } from '../actions'
 
+import courses from '../apis/courses';
 
 class CourseList extends React.Component {
 
-
-    componentWillMount = async () => {
-        this.props.initCourse({
-            value:  '',
-            courses: [],
-            filteredCourses: []
-        })
-        await this.props.fetchCourses();
-        await this.props.searchCourse(this.props.courses.value)
+    state = {
+        query: '',
+        courses: [],
+        filteredData: []
     }
 
-    componentDidMount = () => {
+    componentDidMount() {
+        
+    }
 
+    componentWillMount() {
+        this.fetchCourses();
+    }
+
+    async fetchCourses() {
+        const response = await courses.get('/courses');
+        const data = await response.data;
+        this.setState({ courses: data})
+        const query = this.state.query;
+        this.setState(prevState => {
+          
+            const filteredData = prevState.courses.filter(element => {
+              return element.title.toLowerCase().includes(query.toLowerCase());
+            });
+            console.log(filteredData);
+            return {
+              query,
+              filteredData
+            };
+          });
+        
     }
 
 
     handleInputChange = event => {
-        const value = event.target.value;
-        this.props.searchCourse(value);
-    }
+        const query = event.target.value;
+        console.log(query);
+    
+        this.setState(prevState => {
+          
+          const filteredData = prevState.courses.filter(element => {
+            return element.title.toLowerCase().includes(query.toLowerCase());
+          });
+          console.log(filteredData);
+          return {
+            query,
+            filteredData
+          };
+        });
+      };
+
+
 
 
     renderInstructor(course) {
@@ -43,7 +74,7 @@ class CourseList extends React.Component {
     renderList() {
 
         
-            return this.props.courses.filteredCourses.map(course => {
+            return this.state.filteredData.map(course => {
                 return (
                     <div className="list-group-item" key={course.id}>
                         
@@ -63,7 +94,6 @@ class CourseList extends React.Component {
     }
 
     render() {
-        
         return(
             <div>
                 <h2 className="my-4">Our Courses</h2>
@@ -74,7 +104,7 @@ class CourseList extends React.Component {
                             className="form-control" 
                             id="filter" 
                             placeholder="Search for..." 
-                            value={this.props.courses.value} 
+                            ref={input => this.search = input} 
                             onChange={this.handleInputChange} />
                     </div>
                 </form>
@@ -87,11 +117,4 @@ class CourseList extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        user: state.user,
-        courses: state.courses
-    }
-}
-
-export default connect(mapStateToProps, { fetchCourses, searchCourse, initCourse })(CourseList);
+export default CourseList

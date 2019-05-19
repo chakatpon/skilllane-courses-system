@@ -12,7 +12,9 @@ import {
     FETCH_COURSES,
     FETCH_COURSE,
     DELETE_COURSE,
-    EDIT_COURSE
+    EDIT_COURSE,
+    SEARCH_COURSE,
+    INIT_COURSE
     
 } from './types'
 
@@ -52,10 +54,24 @@ export const setRole = (event) => {
     }
 }
 
+export const initCourse = (value) => {
+    return {
+        type: INIT_COURSE,
+        payload: value
+    }
+}
+
 export const logIn = (data) => {
     return {
         type: LOG_IN,
         payload: {}
+    }
+}
+
+export const searchCourse = (value) => {
+    return {
+        type: SEARCH_COURSE,
+        payload: value
     }
 }
 
@@ -70,7 +86,7 @@ export const fetchCourses = () => async (dispatch) => {
     const response = await courses.get('/courses');
     
     dispatch({ type: FETCH_COURSES, payload: response.data});
-    history.push('/');
+    console.log("data from action: ",response.data) 
 }
 
 export const fetchCourse = (id) => async (dispatch) => {
