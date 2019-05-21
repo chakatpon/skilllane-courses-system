@@ -24,9 +24,9 @@ export default (state = INITIAL_STATE, action) => {
         case FETCH_COURSE:
             return {...state, courses: [...{...state.courses, [action.payload.id]: action.payload}]};
         case CREATE_COURSE:
-            return {...state, courses: {...state.courses, [action.payload.id]: action.payload}};
+            return {...state, courses: [...{...state.courses, [action.payload.id]: action.payload}]};
         case EDIT_COURSE:
-            return {...state, courses: {...state.courses, [action.payload.id]: action.payload}};
+            return {...state, courses: [...{...state.courses, [action.payload.id]: action.payload}]};
         case DELETE_COURSE:
             return {...state, courses: _.omit(state.courses, action.payload)};
         case SEARCH_COURSE:

@@ -10,6 +10,7 @@ import CourseCreate from '../components/CourseCreate';
 import CourseEdit from '../components/CourseEdit';
 import CourseDelete from '../components/CourseDelete';
 import CourseShow from '../components/CourseShow';
+import CourseForm from '../components/CourseForm';
 
 class App extends React.Component {
     render() {
