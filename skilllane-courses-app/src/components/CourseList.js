@@ -21,7 +21,6 @@ class CourseList extends React.Component {
 
     }
 
-
     handleInputChange = event => {
         const value = event.target.value;
         this.props.searchCourse(value);

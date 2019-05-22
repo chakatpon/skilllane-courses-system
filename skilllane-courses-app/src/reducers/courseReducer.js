@@ -19,16 +19,23 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case FETCH_COURSES:
-            console.log("state : ",{...state, courses: [...action.payload]})
             return {...state, courses: [...action.payload]};
         case FETCH_COURSE:
-            return {...state, courses: [...{...state.courses, [action.payload.id]: action.payload}]};
+            return {...state, courses: [...state.courses, ..._.mapKeys(action.payload)]};
         case CREATE_COURSE:
-            return {...state, courses: [...{...state.courses, [action.payload.id]: action.payload}]};
+            console.log("create cortse", {...state, courses: [...state.courses, action.payload]} )
+            return {...state, courses: [...state.courses, action.payload]};
         case EDIT_COURSE:
-            return {...state, courses: [...{...state.courses, [action.payload.id]: action.payload}]};
+            return {...state, courses: [...state.courses, ..._.mapKeys(action.payload)]};
         case DELETE_COURSE:
-            return {...state, courses: _.omit(state.courses, action.payload)};
+            {
+                console.log("action payload",action.payload)
+                const courses = state.courses.filter( course => {
+                      return course.id != action.payload;
+                })
+                console.log("delete course : ",{...state, courses: courses})
+                return {...state, courses: courses};
+            }
         case SEARCH_COURSE:
                 {
                     const value = action.payload;

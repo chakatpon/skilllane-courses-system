@@ -86,7 +86,7 @@ export const fetchCourses = () => async (dispatch) => {
     const response = await courses.get('/courses');
     
     dispatch({ type: FETCH_COURSES, payload: response.data});
-    console.log("data from action: ",response.data) 
+    
 }
 
 export const fetchCourse = (id) => async (dispatch) => {

@@ -1,37 +1,16 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import courses from '../apis/courses';
+import { fetchCourse, deleteCourse} from '../actions'
 import history from '../history'
-import { userService } from '../_services';
+
 
 
 class CourseDelete extends React.Component {
 
-    state = {
-        user: {},
-        users: [],
-        course : {}
-    }
-
-    componentWillMount() {
-        this.setState({ 
-            user: JSON.parse(localStorage.getItem('user')),
-            users: { loading: true }
-        });
-        userService.getAll().then(users => this.setState({ users }));
-        this.fetchCourse(this.props.match.params.id);
-    }
-
-    fetchCourse = async (id) => {
-        const response = await courses.get(`/courses/${id}`);
-        console.log(response);
-        this.setState({ course : response.data})
-    }
-
-    deleteCourse = async (id) => {
-        await courses.delete(`/courses/${id}`);
-        history.push('/');
+    componentDidMount() {
+        this.props.fetchCourse(this.props.match.params.id);
     }
 
     renderAction() {
@@ -40,7 +19,7 @@ class CourseDelete extends React.Component {
 
         return (
             <React.Fragment>
-                <button onClick={() => this.deleteCourse(id)} className="btn btn-danger" style={{ marginRight:5 }}>Delete</button>
+                <button onClick={() => this.props.deleteCourse(id)} className="btn btn-danger" style={{ marginRight:5 }}>Delete</button>
                 <Link to="/" className="btn btn-primary">Cancel</Link>
             </React.Fragment>
         );
@@ -48,10 +27,10 @@ class CourseDelete extends React.Component {
     }
 
     renderContent() {
-        if (!this.state.course) {
+        if (!this.props.course) {
             return 'Are you sure you want to delete this course?'
         }
-        return `Are you sure you want to delete the course with name: ${this.state.course.title}`
+        return `Are you sure you want to delete the course with name: ${this.props.course.title}`
     }
 
     render() {
@@ -71,4 +50,8 @@ class CourseDelete extends React.Component {
     }
 }
 
-export default CourseDelete;
+const mapStateToProps = (state, ownProps) => {
+    return { course: state.courses.courses[ownProps.match.params.id]}
+}
+
+export default connect(mapStateToProps, { fetchCourse, deleteCourse })(CourseDelete);
